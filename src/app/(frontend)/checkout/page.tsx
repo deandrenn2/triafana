@@ -67,7 +67,6 @@ const CheckoutPage = () => {
       <section>
         <div className="checkout-layout">
           <form onSubmit={(e) => e.preventDefault()}>
-            {/* INFORMACIÓN DE CONTACTO */}
             <div className="form-card">
               <h3>
                 <span className="checkoutBadge badge-cyan">1</span>
@@ -324,7 +323,7 @@ const CheckoutPage = () => {
                     <div className="summycart-perdidos">
                       <h4>
                         {summyCart.name.length > 17
-                          ? `${summyCart.name.slice(0, 25)}...`
+                          ? `${summyCart.name.slice(0, 17)}...`
                           : summyCart.name}
                       </h4>
 

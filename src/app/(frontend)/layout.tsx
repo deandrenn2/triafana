@@ -1,8 +1,8 @@
 import './styles.css'
-import type { Metadata } from 'next'
-import React from 'react'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import React from 'react'
+import type { Metadata } from 'next'
+import { ToastContainer } from 'react-toastify'
 import { Header } from '@/layout/Header/Header'
 import { Footer } from '@/layout/Footer/Footer'
 import ScrollToTop from '@/components/ScrollToTop'
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         <CartProvider>
           <ScrollToTop />

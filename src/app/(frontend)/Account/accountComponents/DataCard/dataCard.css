@@ -68,8 +68,13 @@
   box-sizing: border-box;
 }
 
+.btn-container{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
 
-.btn{
+.btn-data{
     display: inline-flex;
     align-items: center;
     justify-content: center;
