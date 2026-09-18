@@ -28,7 +28,6 @@
   box-shadow: 0 10px 24px rgba(10, 102, 109, .28);
 }
 
-
 .btn-ghost:hover {
   color: var(--coral);
   transform: translateY(-2px);
@@ -141,4 +140,14 @@
   padding-top: clamp(10px, 4vw, 44px);
   margin-bottom: 20px;
   align-items: start;
+}
+
+@media (max-width: 768px) {
+  .tecnology-shop {
+    display: block;
+  }
+
+  .desktop-filters {
+    display: none;
+  }
 }

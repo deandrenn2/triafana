@@ -1,11 +1,13 @@
 import './clothes.css'
 import CatalogMenu from '@/components/CategoryMenu/CatalogMenu'
 import Filters from '@/components/Filters/Filters'
+import MobileFilters from '@/components/Filters/MobileFilters/MobileFilters'
 import { ShopGrid } from '@/components/ShopGrid/ShopGrid'
 
 type Props = {
   searchParams: Promise<{
     sort?: string
+    subcategory?: string
   }>
 }
 
@@ -19,15 +21,19 @@ export default async function Clothespage({ searchParams }: Props) {
           <a href="/">Inicio</a>/<span>Ropa</span>
         </nav>
         <h1 className="page-title">Ropa</h1>
-        <p className="lead">Explora cosmetiquería: cabello, perfumes, piel, salud, vitaminas.</p>
+        <p className="lead">Explora ropa para caballeros, niños y damas para cada ocasión.</p>
       </section>
       <div className="chip-row">
         <CatalogMenu active={'ropa'} />
       </div>
+      <MobileFilters category="ropa" />
       <section className="clothes-shop">
-        <Filters category="ropa" />
+        <div className="desktop-filters">
+          <Filters category="ropa" />
+        </div>
+
         <div>
-          <ShopGrid category="ropa" sort={params.sort} />
+          <ShopGrid category="ropa" subcategory={params.subcategory} sort={params.sort} />
         </div>
       </section>
     </div>
