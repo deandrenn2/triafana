@@ -209,6 +209,7 @@ export interface Product {
   subcategory: number | Subcategory;
   image: number | Media;
   discount?: number | null;
+  sizes?: ('XS' | 'S' | 'M' | 'L' | 'XL')[] | null;
   oldPrice?: string | null;
   featured?: boolean | null;
   updatedAt: string;
@@ -613,6 +614,7 @@ export interface ProductsSelect<T extends boolean = true> {
   subcategory?: T;
   image?: T;
   discount?: T;
+  sizes?: T;
   oldPrice?: T;
   featured?: T;
   updatedAt?: T;
