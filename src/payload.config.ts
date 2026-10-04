@@ -25,14 +25,36 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '- TRIAFANA Store',
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/png',
+          url: '/triafana-logo.png',
+        },
+      ],
+    },
+    components: {
+      graphics: {
+        Logo: './components/Brand',
+      },
+    },
   },
-  collections: [Customers, Favorites, Orders, Coupons, Users, Banners, Media, Products, Subcategories],
+  collections: [
+    Customers,
+    Favorites,
+    Orders,
+    Coupons,
+    Users,
+    Banners,
+    Media,
+    Products,
+    Subcategories,
+  ],
   globals: [PromoBanner],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
-  // Solo se configura SMTP si hay host; si no, Payload usa el fallback de
-  // consola y no intenta verificar ninguna conexión (evita "Error verifying
-  // Nodemailer transport" al arrancar sin credenciales).
   ...(process.env.SMTP_HOST
     ? {
         email: nodemailerAdapter({
@@ -57,20 +79,9 @@ export default buildConfig({
     client: {
       url: process.env.DATABASE_URL || '',
     },
-    // Push is only for quick local iteration; once migrations exist we apply
-    // schema changes explicitly via `payload migrate` to avoid drift bugs.
-    //
-    // NOTE: we deliberately do NOT set `prodMigrations` here. That option
-    // makes Payload attempt migrations as part of its own init whenever
-    // NODE_ENV=production — which `next build` sets internally too, so it
-    // ends up trying to migrate whatever DATABASE_URL is active (including
-    // a local dev DB) during the build's parallel static-generation
-    // workers. If that DB has any drift (e.g. from dev-mode push), Payload
-    // shows an interactive "data loss, proceed? (y/N)" prompt that the
-    // build workers can't answer, and the build hangs/times out.
-    // Migrations run once, explicitly, via `payload migrate` in
-    // docker-entrypoint.sh before the server starts — that's the only
-    // place they should run.
+    // push desactivado a propósito: los cambios de esquema se aplican solo
+    // con `pnpm migrate`. Sin esto, Payload intenta un push interactivo
+    // (pregunta "created or renamed?") que cuelga el arranque y el build.
     push: false,
   }),
   sharp,
