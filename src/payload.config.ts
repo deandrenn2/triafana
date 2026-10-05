@@ -14,6 +14,7 @@ import { Subcategories } from './collections/Subcategories'
 import { Favorites } from './collections/Favorites'
 import { Orders } from './collections/Orders'
 import { Coupons } from './collections/Coupons'
+import { Subscribers } from './collections/Subscribers'
 import { PromoBanner } from './globals/PromoBanner'
 
 const filename = fileURLToPath(import.meta.url)
@@ -46,6 +47,7 @@ export default buildConfig({
     Favorites,
     Orders,
     Coupons,
+    Subscribers,
     Users,
     Banners,
     Media,
