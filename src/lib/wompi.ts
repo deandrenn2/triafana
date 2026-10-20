@@ -29,9 +29,6 @@ const getEventsSecret = () => {
 
   return secret
 }
-
-// https://docs.wompi.co — Web Checkout integrity signature:
-// SHA256(reference + amountInCents + currency [+ expirationTime] + integritySecret)
 export const buildIntegritySignature = ({
   reference,
   amountInCents,

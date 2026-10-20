@@ -69,6 +69,20 @@ export const Products: CollectionConfig = {
     },
 
     {
+      name: 'sizes',
+      type: 'select',
+      hasMany: true,
+      label: 'Tallas disponibles (solo ropa)',
+      options: [
+        { label: 'XS', value: 'XS' },
+        { label: 'S', value: 'S' },
+        { label: 'M', value: 'M' },
+        { label: 'L', value: 'L' },
+        { label: 'XL', value: 'XL' },
+      ],
+    },
+
+    {
       name: 'oldPrice',
       type: 'text',
       label: 'Precio anterior',

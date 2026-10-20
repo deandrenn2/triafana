@@ -4,6 +4,7 @@ import * as migration_20260918_025719_add_customers_google_id from './20260918_0
 import * as migration_20260918_040345_add_orders_collection from './20260918_040345_add_orders_collection';
 import * as migration_20260919_220339_coupons from './20260919_220339_coupons';
 import * as migration_20260929_024721_add_wompi_payment_fields from './20260929_024721_add_wompi_payment_fields';
+import * as migration_20261005_224429_subscribers from './20261005_224429_subscribers';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260929_024721_add_wompi_payment_fields.up,
     down: migration_20260929_024721_add_wompi_payment_fields.down,
     name: '20260929_024721_add_wompi_payment_fields',
+  },
+  {
+    up: migration_20261005_224429_subscribers.up,
+    down: migration_20261005_224429_subscribers.down,
+    name: '20261005_224429_subscribers'
   },
 ];

@@ -2,6 +2,7 @@ import './Footer.css'
 import Link from 'next/link'
 import Logo from '../Logo/Logo'
 import { FaInstagram, FaFacebookF, FaTiktok } from 'react-icons/fa'
+import { NewsletterForm } from './NewsletterForm'
 
 export const Footer = () => {
   return (
@@ -50,10 +51,7 @@ export const Footer = () => {
         <div>
           <h4>Recibe ofertas</h4>
           <p>Suscríbete y entérate de promociones y lanzamientos.</p>
-          <form className="newsletter">
-            <input type="email" placeholder="tu@correo.com" aria-label="Correo" className='footer-input' />
-            <button className="footer-btn btn-secondary" type="submit">Unirme</button>
-          </form>
+          <NewsletterForm />
         </div>
       </div>
 

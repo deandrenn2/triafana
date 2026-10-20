@@ -8,6 +8,9 @@ type Props = {
   searchParams: Promise<{
     sort?: string
     subcategory?: string
+    search?: string
+    price?: string
+    size?: string
   }>
 }
 
@@ -35,7 +38,14 @@ export default async function CosmeticsShoppage({ searchParams }: Props) {
         </div>
 
         <div className="Cosmetics-products">
-          <ShopGrid category="cosmetiqueria" subcategory={params.subcategory} sort={params.sort} />
+          <ShopGrid
+            category="cosmetiqueria"
+            subcategory={params.subcategory}
+            sort={params.sort}
+            search={params.search}
+            price={params.price}
+            size={params.size}
+          />
         </div>
       </section>
     </div>

@@ -1,17 +1,20 @@
 import './filtersCut.css'
-import { useState } from 'react'
+import { SIZES } from '@/lib/productFilters'
 
-export const FiltersCut = () => {
-  const [selectedSize, setSelectedSize] = useState<string | null>(null)
-  const sizes = ['XS', 'S', 'M', 'L', 'XL']
+type Props = {
+  value: string | null
+  onChange: (size: string | null) => void
+}
 
+export const FiltersCut = ({ value, onChange }: Props) => {
   return (
     <div className="filters-cut">
-      {sizes.map((size) => (
+      {SIZES.map((size) => (
         <button
           key={size}
-          className={`filter-size ${selectedSize === size ? 'is-active' : ''}`}
-          onClick={() => setSelectedSize(selectedSize === size ? null : size)}
+          type="button"
+          className={`filter-size ${value === size ? 'is-active' : ''}`}
+          onClick={() => onChange(value === size ? null : size)}
         >
           {size}
         </button>

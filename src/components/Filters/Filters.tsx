@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import './filters.css'
 import { FiltersCut } from './FiltersCut/FiltersCut'
+import { PRICE_RANGES, type PriceRangeKey } from '@/lib/productFilters'
 
 type Subcategory = {
   id: string
@@ -15,12 +16,23 @@ type FiltersProps = {
   category?: string
 }
 
+const readList = (params: URLSearchParams, key: string) =>
+  params.get(key)?.split(',').filter(Boolean) || []
+
 export default function Filters({ category }: FiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [subcategories, setSubcategories] = useState<Subcategory[]>([])
-  const appliedSubcategories = searchParams.get('subcategory')?.split(',').filter(Boolean) || []
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(appliedSubcategories)
+
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(() =>
+    readList(searchParams, 'subcategory'),
+  )
+  const [selectedPrices, setSelectedPrices] = useState<PriceRangeKey[]>(() =>
+    readList(searchParams, 'price') as PriceRangeKey[],
+  )
+  const [selectedSize, setSelectedSize] = useState<string | null>(
+    () => searchParams.get('size'),
+  )
 
   useEffect(() => {
     const loadSubcategories = async () => {
@@ -41,8 +53,6 @@ export default function Filters({ category }: FiltersProps) {
 
         const data = await res.json()
 
-        console.log('SUBCATEGORÍAS:', data.docs)
-
         setSubcategories(data.docs)
       } catch (error) {
         console.error('Error:', error)
@@ -53,34 +63,68 @@ export default function Filters({ category }: FiltersProps) {
     loadSubcategories()
   }, [category])
 
-  const handleSubcategoryChange = (subcategory: Subcategory) => {
-    setSelectedSubcategories((current) => {
-      let updated: string[]
-      if (current.includes(subcategory.slug)) {
-        updated = current.filter((slug) => slug !== subcategory.slug)
-      } else {
-        updated = [...current, subcategory.slug]
-      }
+  const syncToUrl = (next?: {
+    subs?: string[]
+    prices?: PriceRangeKey[]
+    size?: string | null
+  }) => {
+    const subs = next?.subs ?? selectedSubcategories
+    const prices = next?.prices ?? selectedPrices
+    const size = next?.size !== undefined ? next.size : selectedSize
 
-      if (updated.length === 0) {
-        const params = new URLSearchParams(searchParams.toString())
-        params.delete('subcategory')
-        router.push(`?${params.toString()}`)
-      }
-
-      return updated
-    })
-  }
-
-  const handleApplyFilters = () => {
     const params = new URLSearchParams(searchParams.toString())
-    if (selectedSubcategories.length > 0) {
-      params.set('subcategory', selectedSubcategories.join(','))
+
+    if (subs.length > 0) {
+      params.set('subcategory', subs.join(','))
     } else {
       params.delete('subcategory')
     }
 
-    router.push(`?${params.toString()}`)
+    if (prices.length > 0) {
+      params.set('price', prices.join(','))
+    } else {
+      params.delete('price')
+    }
+
+    if (size) {
+      params.set('size', size)
+    } else {
+      params.delete('size')
+    }
+
+    const nextStr = params.toString()
+    if (nextStr !== searchParams.toString()) {
+      router.replace(`?${nextStr}`, { scroll: false })
+    }
+  }
+
+  const handleApplyFilters = () => {
+    syncToUrl()
+  }
+
+  const toggleSubcategory = (slug: string) => {
+    const removing = selectedSubcategories.includes(slug)
+    const updated = removing
+      ? selectedSubcategories.filter((s) => s !== slug)
+      : [...selectedSubcategories, slug]
+    setSelectedSubcategories(updated)
+    // Al desmarcar se aplica al instante; al marcar espera "Aplicar filtros"
+    if (removing) syncToUrl({ subs: updated })
+  }
+
+  const togglePrice = (key: PriceRangeKey) => {
+    const removing = selectedPrices.includes(key)
+    const updated = removing
+      ? selectedPrices.filter((k) => k !== key)
+      : [...selectedPrices, key]
+    setSelectedPrices(updated)
+    if (removing) syncToUrl({ prices: updated })
+  }
+
+  const handleSizeChange = (next: string | null) => {
+    setSelectedSize(next)
+    // Al quitar la talla se aplica al instante; al elegir espera "Aplicar filtros"
+    if (next === null) syncToUrl({ size: null })
   }
 
   return (
@@ -96,7 +140,7 @@ export default function Filters({ category }: FiltersProps) {
                 type="checkbox"
                 value={subcategory.slug}
                 checked={selectedSubcategories.includes(subcategory.slug)}
-                onChange={() => handleSubcategoryChange(subcategory)}
+                onChange={() => toggleSubcategory(subcategory.slug)}
               />
 
               {subcategory.name}
@@ -110,30 +154,21 @@ export default function Filters({ category }: FiltersProps) {
       <div className="filter-group">
         <h4>Precio</h4>
 
-        <label className="filter-opt">
-          <input type="checkbox" />
-          Menos de $100.000
-        </label>
-
-        <label className="filter-opt">
-          <input type="checkbox" />
-          $100.000 – $500.000
-        </label>
-
-        <label className="filter-opt">
-          <input type="checkbox" />
-          $500.000 – $1.500.000
-        </label>
-
-        <label className="filter-opt">
-          <input type="checkbox" />
-          Más de $1.500.000
-        </label>
+        {PRICE_RANGES.map((range) => (
+          <label key={range.key} className="filter-opt">
+            <input
+              type="checkbox"
+              checked={selectedPrices.includes(range.key)}
+              onChange={() => togglePrice(range.key)}
+            />
+            {range.label}
+          </label>
+        ))}
       </div>
 
       <div className="filter-group">
         <h4>Tallas</h4>
-        <FiltersCut />
+        <FiltersCut value={selectedSize} onChange={handleSizeChange} />
       </div>
 
       <button type="button" className="btn btn-teal btn-block" onClick={handleApplyFilters}>

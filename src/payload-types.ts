@@ -72,6 +72,7 @@ export interface Config {
     favorites: Favorite;
     orders: Order;
     coupons: Coupon;
+    subscribers: Subscriber;
     users: User;
     banners: Banner;
     media: Media;
@@ -88,6 +89,7 @@ export interface Config {
     favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
     coupons: CouponsSelect<false> | CouponsSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     banners: BannersSelect<false> | BannersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -209,6 +211,7 @@ export interface Product {
   subcategory: number | Subcategory;
   image: number | Media;
   discount?: number | null;
+  sizes?: ('XS' | 'S' | 'M' | 'L' | 'XL')[] | null;
   oldPrice?: string | null;
   featured?: boolean | null;
   updatedAt: string;
@@ -292,6 +295,16 @@ export interface Coupon {
   usedCount: number;
   active: boolean;
   expiresAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: number;
+  email: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -382,6 +395,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'coupons';
         value: number | Coupon;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: number | Subscriber;
       } | null)
     | ({
         relationTo: 'users';
@@ -542,6 +559,15 @@ export interface CouponsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -613,6 +639,7 @@ export interface ProductsSelect<T extends boolean = true> {
   subcategory?: T;
   image?: T;
   discount?: T;
+  sizes?: T;
   oldPrice?: T;
   featured?: T;
   updatedAt?: T;

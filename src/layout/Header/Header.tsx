@@ -9,11 +9,12 @@ import {
   faBars,
   faXmark,
   faCartShopping,
-  faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { useCart } from '@/context/CartContext'
 import AvatarLink from '../AvatarLink/AvatarLink'
+import { SearchComponents } from '@/components/Search/searchComponents'
+
 
 export const Header = () => {
   const [scroll, setScroll] = useState(false)
@@ -68,11 +69,9 @@ export const Header = () => {
             </Link>
           </nav>
 
-          <form className="nav-search">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
-
-            <input type="text" placeholder="Buscar productos, marcas" />
-          </form>
+          <div className="nav-search">
+            <SearchComponents />
+          </div>
 
           <div className="nav-actions">
             <Link href="/account/favoritesPage" className="icon-btn" aria-label="Favoritos">
@@ -119,6 +118,10 @@ export const Header = () => {
               <b>TRIAFANA</b>
             </Link>
 
+            <div className="mobile-search">
+              <SearchComponents onNavigate={() => setMenuOpen(false)} />
+            </div>
+
             <nav className="mobile-nav">
               <Link href="/" className={pathname === '/' ? 'active' : ''}>
                 Inicio
@@ -126,6 +129,14 @@ export const Header = () => {
 
               <Link href="/tecnology" className={pathname === '/tecnology' ? 'active' : ''}>
                 Tecnología
+              </Link>
+
+              <Link href="/cosmeticsShop" className={pathname === '/cosmeticsShop' ? 'active' : ''}>
+                Cosmetiquería
+              </Link>
+
+              <Link href="/clothes" className={pathname === '/clothes' ? 'active' : ''}>
+                Ropa
               </Link>
 
               <Link href="/services" className={pathname === '/services' ? 'active' : ''}>
@@ -138,6 +149,6 @@ export const Header = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
